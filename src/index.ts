@@ -9,11 +9,12 @@ import {
 const server = new Server(
     {
         name: "hello-mcp",
-        version: "1.0.0",
+        version: "1.0.1",
     },
     {
         capabilities: {
             resources: {}, // 리소스 기능 활성화
+
         },
     }
 );
@@ -27,6 +28,12 @@ async function main() {
                     uri: "hello://world",
                     name: "Hello World Message",
                     description: "간단한 인사 메시지",
+                    mimeType: "text/plain",
+                },
+                {
+                    uri: "time://now",
+                    name: "Show Current Time",
+                    description: "간단한 시간 표시",
                     mimeType: "text/plain",
                 },
             ],
@@ -45,6 +52,18 @@ async function main() {
                 ],
             };
         }
+
+        if (request.params.uri.startsWith("time://now")) {
+            return {
+                contents: [
+                    {
+                        uri: "time://now",
+                        text: `Hello, Time is ${new Date().toLocaleString()}.`,
+                    }
+                ],
+            }
+        }
+
         throw new Error("Resource not found");
     });
 
